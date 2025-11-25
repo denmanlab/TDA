@@ -10,7 +10,7 @@ All steps are in jupyter notebooks with intermediate data files saved and reused
 
 <br>
 
-There are example intermediate data files provided in the ```data\``` folder, but all downstream intermediates can be generated from using ```clean_spike_data.zip``` located in ```data/```
+There are example intermediate data files provided in the ```data/``` folder, but all downstream intermediates can be generated from using ```clean_spike_data.zip``` located in ```data/```
 
 # Enviornment set-up
 use ```conda env create -f tda_environment.yml```
