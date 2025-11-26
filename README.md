@@ -25,7 +25,7 @@ If using a machine with CUDA capabilities: ```conda env create -f tda_environmen
 
 If using CPU: ```conda env create -f tda_environment_cpu.yml``` & ```conda activate topology_cpu```
 
-<br> To check GPU availability: ```import torch``` & ```torch.cuda.is_available()``` -> if ```False``` you may not be able to handle CEBRA models. There may be a CPU work-around, but that has not been tested with this pipeline.
+<br> To check GPU availability: ```import torch``` & ```torch.cuda.is_available()``` 
 
 RAM: recommended at least 8GB
 
