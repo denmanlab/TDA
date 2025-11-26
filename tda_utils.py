@@ -1,7 +1,7 @@
 """
 Utilities for TDA 
 
-allows for data input and handling across different operating systems in the TDA repo.
+allows for data input and handling across different OS in the TDA repo.
 
 @emilyekstrum
 11/25/25
@@ -21,16 +21,16 @@ import re
 
 class TDADataManager:
     """
-    data management for TDA workflows.
+    data management for TDA workflows
     handles cross-OS paths 
     """
     
     def __init__(self, workspace_root: Optional[Union[str, Path]] = None):
         """
-        Initialize TDA Data Manager.
+        Initialize TDA Data Manager
         
         Args:
-            workspace_root: Optional path to workspace root. If None, auto-detects.
+            workspace_root: optional path to workspace root. if None, auto-detects.
         """
 
         self.workspace_root = self._find_workspace_root(workspace_root)
@@ -45,13 +45,13 @@ class TDADataManager:
             if self._is_tda_repo(root):
                 return root
         
-        # Search from current working directory upwards
+        # search from current working directory upwards
         current = Path.cwd()
         for path in [current] + list(current.parents):
             if self._is_tda_repo(path):
                 return path
         
-        # Search common locations
+        # search common locations
         search_paths = [
             Path.cwd().parent / 'TDA',
             Path.cwd() / 'TDA',
@@ -74,7 +74,7 @@ class TDADataManager:
         if not path.exists():
             return False
         
-        # Check for characteristic files/folders
+        # check for characteristic files/folders
         required_items = ['data', 'notebooks']
         optional_items = ['tda_environment.yml', 'README.md']
         
@@ -125,7 +125,7 @@ class TDADataManager:
 
         datasets = []
         
-        # Search in clean spike data directory
+        # search in clean spike data directory
         clean_data_dir = self.data_paths['clean_spike_data_dir']
         if clean_data_dir.exists():
             for file_path in clean_data_dir.glob(pattern):
@@ -135,7 +135,7 @@ class TDADataManager:
     
     def load_spike_data(self, dataset_name: Optional[str] = None) -> Tuple[List, List, Dict]:
         """
-        Smart data loader for spike data.
+        data loader for spike data.
         
         Args:
             dataset_name: Optional specific dataset name to load
@@ -152,7 +152,7 @@ class TDADataManager:
                 "add .pkl files to the data/clean_spike_data/ folder."
             )
         
-        # Select dataset
+        # select dataset
         if dataset_name is None:
             if len(available_datasets) == 1:
                 selected_name, selected_path = available_datasets[0]
@@ -164,7 +164,7 @@ class TDADataManager:
                 print("\nUsing the first one. To specify, use dataset_name parameter.")
                 selected_name, selected_path = available_datasets[0]
         else:
-            # Find exact or partial match
+            # find exact or partial match
             matches = [(name, path) for name, path in available_datasets 
                       if dataset_name.lower() in name.lower()]
             if not matches:
@@ -172,7 +172,7 @@ class TDADataManager:
                 raise ValueError(f"Dataset '{dataset_name}' not found. Available: {available_names}")
             selected_name, selected_path = matches[0]
         
-        # Load the data
+        # load the data
         print(f"Loading dataset: {selected_name}")
         try:
             with open(selected_path, 'rb') as f:
@@ -243,7 +243,7 @@ class TDADataManager:
         with open(filepath, 'rb') as f:
             obj = pkl.load(f)
         
-        # Handle different pickle formats
+        # handle different pickle formats
         if isinstance(obj, (list, tuple)):
             return [np.asarray(dgm) for dgm in obj]
         
@@ -252,7 +252,7 @@ class TDADataManager:
                 dgms = obj['dgms']
                 return [np.asarray(dgm) for dgm in dgms]
             
-            # Try numeric keys (0, 1, 2, ...)
+            # try numeric keys 
             max_key = max(k for k in obj.keys() if isinstance(k, int)) if obj else -1
             if max_key >= 0:
                 return [np.asarray(obj[k]) for k in range(max_key + 1) if k in obj]
@@ -286,21 +286,21 @@ class TDADataManager:
         filepath = Path(filepath)
         filename = filepath.stem.lower()
         
-        # Extract region
+        # extract region
         region = 'unknown'
         if 'v1' in filename:
             region = 'V1'
         elif 'lgn' in filename:
             region = 'LGN'
         
-        # Extract dimension
+        # extract dimension
         dimension = 'unknown'
         for dim in ['3d', '8d', '24d', '32d']:
             if dim in filename:
                 dimension = dim
                 break
         
-        # Extract stimulus
+        # extract stimulus
         stimulus_map = {
             'cex': 'color_exchange',
             'dg': 'drifting_gratings', 
@@ -314,13 +314,13 @@ class TDADataManager:
                 stimulus = full_name
                 break
         
-        # Extract mouse ID
+        # extract mouse ID
         mouse_id = 'unknown'
-        mouse_match = re.search(r'[cd]\d+', filename)  # Match C153, d5...
+        mouse_match = re.search(r'[cd]\d+', filename)  # match C153, d5, etc
         if mouse_match:
             mouse_id = mouse_match.group().upper()
         
-        # Check for shuffled/random data
+        # check for shuffled/random data
         is_shuffled = 'shuffled' in filename
         is_random = 'random' in filename
         
@@ -365,7 +365,7 @@ class TDADataManager:
         print(f"Workspace root: {self.workspace_root}")
         print(f"Data directory: {self.data_paths['data_root']}")
         
-        # Check each data directory
+        # check each data directory
         for name, path in self.data_paths.items():
             if name == 'data_root':
                 continue
@@ -378,17 +378,17 @@ class TDADataManager:
                 if pkl_files:
                     print(f"      Contains {len(pkl_files)} .pkl files")
         
-        # Show available datasets
+        # show available datasets
         datasets = self.get_available_datasets()
         if datasets:
             print(f"\nAvailable spike datasets ({len(datasets)}):")
-            for name, _ in datasets[:5]:  # Show first 5
+            for name, _ in datasets[:5]:  # show first 5
                 print(f"  • {name}")
             if len(datasets) > 5:
                 print(f"  and {len(datasets) - 5} more")
 
 
-# Global instance - can be imported and used directly
+# global instance - can be imported and used directly
 try:
     tda_manager = TDADataManager()
 except Exception as e:
@@ -396,7 +396,7 @@ except Exception as e:
     tda_manager = None
 
 
-# Convenience functions for backward compatibility
+# convenience functions for backward compatibility
 def setup_data_paths() -> Dict[str, Path]:
     """Legacy function - use TDADataManager instead."""
 
@@ -421,7 +421,7 @@ def find_available_datasets(data_paths: Dict[str, Path]) -> List[Tuple[str, Path
     return tda_manager.get_available_datasets()
 
 
-# Utility functions for common tasks
+# utility functions for common tasks
 def safe_model_device_handling(force_cpu: bool = False) -> str:
     """
     Determine the best device for model training/inference.
@@ -466,7 +466,7 @@ def load_cebra_model_safe(filepath: Union[str, Path],
     print(f"Loading model: {device_info}")
     
     try:
-        # First try normal loading
+        # first try normal loading
         with open(filepath, 'rb') as f:
             loaded_data = pkl.load(f)
         print("Successfully loaded model normally")
@@ -487,7 +487,7 @@ def load_cebra_model_safe(filepath: Union[str, Path],
             try:
                 import io
                 with open(filepath, 'rb') as f:
-                    # Try loading as a torch file first
+                    # try loading as a torch file first
                     try:
                         loaded_data = torch.load(f, map_location='cpu')
                         print("Successfully loaded using torch.load with CPU mapping")
@@ -507,10 +507,10 @@ def load_cebra_model_safe(filepath: Union[str, Path],
                     f"Please use the 'Train CEBRA - CPU' cell to create new embeddings."
                 )
         else:
-            # Re-raise if it's not a CUDA issue
+            # re-raise if it's not a CUDA issue
             raise e
     
-    # Update model devices if needed and models are present
+    # update model devices if needed and models are present
     if isinstance(loaded_data, dict):
         for session_name in loaded_data.keys():
             if isinstance(loaded_data[session_name], dict) and 'model' in loaded_data[session_name]:
@@ -519,7 +519,7 @@ def load_cebra_model_safe(filepath: Union[str, Path],
                     print(f"Moving {session_name} model from {model.device_} to {target_device}")
                     model.device_ = target_device
                 
-                # Also update any torch tensors in embeddings
+                # also update any torch tensors in embeddings
                 if 'embedding' in loaded_data[session_name]:
                     embedding = loaded_data[session_name]['embedding']
                     if hasattr(embedding, 'cpu'):  # It's a torch tensor
