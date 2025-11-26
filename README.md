@@ -1,7 +1,7 @@
 # TDA for population neural activity
 
 Pipeline for:
-1. Training CEBRA models (GPU/CUDA required)
+1. Training CEBRA models (GPU/CUDA capabilities recommended)
 2. Running topological data analysis (TDA) using Ripser
 3. Comparing topology across brain regions, stimuli, and embeddings
     - persistence diagrams, persistence landscapes, persistence barcode, and betti curves
