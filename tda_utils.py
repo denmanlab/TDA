@@ -94,14 +94,14 @@ class TDADataManager:
             'clean_spike_data_dir': data_root / 'clean_spike_data',
             'cebra_examples': data_root / 'CEBRA_embedding_examples',
             'persistence_examples': data_root / 'persistence_diagram_examples',
-            'all_dgms_zip': data_root / 'all_dgms.zip',  # New zip file
-            'all_dgms_dir': data_root / 'all_dgms'       # Extracted directory
+            'all_dgms_zip': data_root / 'all_dgms.zip',  # new zip file
+            'all_dgms_dir': data_root / 'all_dgms'       # extracted directory
         }
     
     def _extract_sample_data_if_needed(self) -> None:
         """Extract sample data zip files if they exist and haven't been extracted yet."""
 
-        # Extract clean_spike_data.zip
+        # extract clean_spike_data.zip
         zip_path = self.data_paths['clean_spike_data_zip']
         extract_dir = self.data_paths['clean_spike_data_dir']
         
@@ -115,7 +115,7 @@ class TDADataManager:
         elif extract_dir.exists():
             print("Spike data already available.")
         
-        # Extract all_dgms.zip
+        # extract all_dgms.zip
         self._extract_all_dgms_if_needed()
     
     def _extract_all_dgms_if_needed(self) -> None:
@@ -148,15 +148,15 @@ class TDADataManager:
         
         files = []
         
-        # Check persistence_examples directory
+        # check persistence_examples directory
         persistence_dir = self.data_paths['persistence_examples']
         if persistence_dir.exists():
             files.extend(list(persistence_dir.glob(pattern)))
         
-        # Check all_dgms directory
+        # check all_dgms directory
         all_dgms_dir = self.data_paths['all_dgms_dir']
         if all_dgms_dir.exists():
-            files.extend(list(all_dgms_dir.rglob(pattern)))  # Recursive search
+            files.extend(list(all_dgms_dir.rglob(pattern)))  # recursive search
         
         return sorted(files)
     
@@ -436,7 +436,7 @@ class TDADataManager:
                 print(f"  and {len(datasets) - 5} more")
 
 
-# global instance - can be imported and used directly
+# global instance of data manager - can be imported and used directly
 try:
     tda_manager = TDADataManager()
 except Exception as e:
@@ -469,7 +469,7 @@ def find_available_datasets(data_paths: Dict[str, Path]) -> List[Tuple[str, Path
     return tda_manager.get_available_datasets()
 
 
-# utility functions for common tasks
+# utility functions for common data handling and loading
 def safe_model_device_handling(force_cpu: bool = False) -> str:
     """
     Determine the best device for model training/inference.
