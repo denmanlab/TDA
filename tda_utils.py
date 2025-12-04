@@ -158,6 +158,14 @@ class TDADataManager:
         if all_dgms_dir.exists():
             files.extend(list(all_dgms_dir.rglob(pattern)))  # recursive search
         
+        # ALSO check for persistence diagram files directly in data root
+        # (since all_dgms.zip extracts files directly to data root, not to subdirectory)
+        data_root = self.data_paths['data_root']
+        if data_root.exists():
+            # Look for files that match CEBRA pattern (these are persistence diagrams)
+            cebra_files = list(data_root.glob("CEBRA_*.pkl"))
+            files.extend(cebra_files)
+        
         return sorted(files)
     
     def get_available_datasets(self, pattern: str = "*.pkl") -> List[Tuple[str, Path]]:
@@ -306,6 +314,15 @@ class TDADataManager:
                 return [np.asarray(obj[k]) for k in range(max_key + 1) if k in obj]
         
         raise ValueError(f"Unrecognized persistence diagram format in {filepath}")
+    
+    def list_all_dgms_files(self) -> List[Path]:
+        """
+        List all persistence diagram .pkl files from both persistence_examples and all_dgms directories.
+        
+        Returns:
+            List of file paths
+        """
+        return self.get_all_persistence_files(pattern="*.pkl")
     
     def load_embedding_data(self, filepath: Union[str, Path], force_cpu: bool = True) -> Tuple[Dict, List[str]]:
         """
