@@ -5,16 +5,18 @@
 - for data collection and preprocessing details: https://doi.org/10.1101/2025.08.25.672226
 
 
-Pipeline for:
+**End-to-end pipeline for:**
 1. Training CEBRA models (GPU/CUDA capabilities recommended)
+    - neural activity embeddings
 2. Running topological data analysis (TDA) using Ripser
+    - constructs a Vietoris-Rips filtration on CEBRA embeddings
 3. Comparing topology across brain regions, stimuli, and embeddings
-    - persistence diagrams, persistence landscapes, persistence barcode, and betti curves
+    - generates persistence diagrams, persistence landscapes, persistence barcode, and betti curves
 
 All steps are in jupyter notebooks with intermediate data files saved and reused in later notebooks
 
 
-## Overview
+## Data Overview
 
 Includes: 
 - cleaned neural spike data as primary input (```data/clean_spike_data.zip```)
