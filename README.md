@@ -6,7 +6,7 @@
 
 
 **End-to-end pipeline for:**
-1. Training CEBRA models (GPU/CUDA capabilities recommended)
+1. Training CEBRA* models (GPU/CUDA capabilities recommended)
     - generates neural activity embeddings
 2. Running topological data analysis (TDA) using Ripser
     - constructs a Vietoris-Rips filtration on CEBRA embeddings
@@ -72,9 +72,10 @@ All numerical steps in the notebooks should be ran sequentially in order. <br> I
 Other notebook:
 ***Persistence_barcodes.ipynb*** 
 
-  - uses fuzzy UMAP algorithm from Gardner et al* to generate persistence barcodes
+  - uses fuzzy UMAP algorithm from Gardner et al** to generate persistence barcodes
   - does not generate embeddings but rather constructs a UMAP neighborhood graph for input into Ripser
 
 <br>
+*https://cebra.ai/docs/
 
-*Gardner, R.J., Hermansen, E., Pachitariu, M. et al. Toroidal topology of population activity in grid cells. Nature 602, 123–128 (2022). https://doi.org/10.1038/s41586-021-04268-7
+**Gardner, R.J., Hermansen, E., Pachitariu, M. et al. Toroidal topology of population activity in grid cells. Nature 602, 123–128 (2022). https://doi.org/10.1038/s41586-021-04268-7
