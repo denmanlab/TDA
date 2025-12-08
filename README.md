@@ -42,7 +42,7 @@ RAM: recommended at least 8GB
 
 ## Running the pipeline
 
-All numerical steps in the notebooks should be ran sequentially in order. <br> If there are multiple processing options per step, choose the desired method and run the cell before moving on to the next.
+All numerical steps in the notebooks should be executed in order. <br> If there are multiple processing options per step, choose the desired method and run the cell before moving on to the next.
 
 1. ***01_CEBRA_embeddings.ipynb***
    - loads cleaned spike data tensors from \data\ folder
