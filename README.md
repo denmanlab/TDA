@@ -8,7 +8,6 @@ Pipeline for:
 
 All steps are in jupyter notebooks with intermediate data files saved and reused in later notebooks
 
-<br>
 
 # Overview
 
@@ -60,8 +59,8 @@ All numerical steps in the notebooks should be ran sequentially in order. <br> I
     - computes average persistence landscapes across embeddings, regions, & stimuli
          - persistence landscape is a vectorized representation of a persistence diagram. these plots are assumed to be more stable than betti curves and displays topological features as functions. often used as input to downstream pipelines like machine learning predictive models or statistical analyses.
            
-<br> <br>
-Other:
+<br>
+Other notebook:
 Persistence_barcodes.ipynb
   - uses fuzzy UMAP algorithm from Gardner et al* to generate persistence barcodes
   - does not generate embeddings but rather constructs a UMAP neighborhood graph for input into Ripser
