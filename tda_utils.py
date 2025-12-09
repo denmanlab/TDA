@@ -1,10 +1,10 @@
 """
-Utilities for TDA 
+Utilities for TDA repo
 
 allows for data input and handling across different OS in the TDA repo.
 
 @emilyekstrum
-12/4/25
+12/9/25
 """
 
 import os
@@ -37,7 +37,7 @@ class TDADataManager:
         self.data_paths = self._setup_data_paths()
         self._extract_sample_data_if_needed()
     
-    def _find_workspace_root(self, provided_root: Optional[Union[str, Path]] = None) -> Path:
+    def _find_workspace_root(self, provided_root: Optional[Union[str, Path]] = None):
         """Find the TDA repository root directory."""
 
         if provided_root:
@@ -68,13 +68,13 @@ class TDADataManager:
             "the TDA repository or provide the correct workspace_root path."
         )
     
-    def _is_tda_repo(self, path: Path) -> bool:
+    def _is_tda_repo(self, path: Path):
         """Check if a path looks like the TDA repository."""
 
         if not path.exists():
             return False
         
-        # check for characteristic files/folders
+        # check for characteristic files/folders in repo
         required_items = ['data', 'notebooks']
         optional_items = ['tda_environment.yml', 'README.md']
         
@@ -83,22 +83,22 @@ class TDADataManager:
         
         return required_found and optional_found
     
-    def _setup_data_paths(self) -> Dict[str, Path]:
+    def _setup_data_paths(self):
         """Set up all data directory paths."""
 
         data_root = self.workspace_root / 'data'
         
         return {
             'data_root': data_root,
-            'clean_spike_data_zip': data_root / 'clean_spike_data.zip',
-            'clean_spike_data_dir': data_root / 'clean_spike_data',
-            'cebra_examples': data_root / 'CEBRA_embedding_examples',
-            'persistence_examples': data_root / 'persistence_diagram_examples',
+            'clean_spike_data_zip': data_root / 'clean_spike_data.zip', # zip file containing pkl files
+            'clean_spike_data_dir': data_root / 'clean_spike_data', # extracted directory from zip
+            'cebra_examples': data_root / 'CEBRA_embedding_examples', # pkl files
+            'persistence_examples': data_root / 'persistence_diagram_examples', # pkl files
             'all_dgms_zip': data_root / 'all_dgms.zip',  # zip file
-            'all_dgms_dir': data_root / 'all_dgms'       # extracted directory from zip
+            'all_dgms_dir': data_root / 'all_dgms'       # extracted directory from zip containing pkl files
         }
     
-    def _extract_sample_data_if_needed(self) -> None:
+    def _extract_sample_data_if_needed(self):
         """Extract sample data zip files if they exist and haven't been extracted yet."""
 
         # extract clean_spike_data.zip
@@ -118,7 +118,7 @@ class TDADataManager:
         # extract all_dgms.zip
         self._extract_all_dgms_if_needed()
     
-    def _extract_all_dgms_if_needed(self) -> None:
+    def _extract_all_dgms_if_needed(self):
         """Extract all_dgms.zip if it exists and hasn't been extracted yet."""
         
         zip_path = self.data_paths['all_dgms_zip']
@@ -135,7 +135,7 @@ class TDADataManager:
         elif extract_dir.exists():
             print("All persistence diagrams already available.")
     
-    def get_all_persistence_files(self, pattern: str = "*.pkl") -> List[Path]:
+    def get_all_persistence_files(self, pattern: str = "*.pkl"):
         """
         Get all persistence diagram files from both persistence_examples and all_dgms directories.
         
@@ -167,7 +167,7 @@ class TDADataManager:
         
         return sorted(files)
     
-    def get_available_datasets(self, pattern: str = "*.pkl") -> List[Tuple[str, Path]]:
+    def get_available_datasets(self, pattern: str = "*.pkl"):
         """
         Find all available datasets matching the pattern.
         
@@ -188,7 +188,7 @@ class TDADataManager:
         
         return sorted(datasets)
     
-    def load_spike_data(self, dataset_name: Optional[str] = None) -> Tuple[List, List, Dict]:
+    def load_spike_data(self, dataset_name: Optional[str] = None):
         """
         data loader for spike data.
         
@@ -228,7 +228,7 @@ class TDADataManager:
             selected_name, selected_path = matches[0]
         
         # load the data
-        print(f"Loading dataset: {selected_name}")
+        print(f"Loading data: {selected_name}")
         try:
             with open(selected_path, 'rb') as f:
                 loaded = pkl.load(f)
@@ -253,10 +253,7 @@ class TDADataManager:
         except Exception as e:
             raise RuntimeError(f"Error loading {selected_name}: {e}")
     
-    def find_files(self, 
-                   pattern: str = "*.pkl", 
-                   directory: str = "persistence_examples",
-                   recursive: bool = True) -> List[Path]:
+    def find_files(self, pattern: str = "*.pkl", directory: str = "persistence_examples", recursive: bool = True):
         """
         Find files matching pattern in specified directory.
         
@@ -282,7 +279,7 @@ class TDADataManager:
         
         return list(search_dir.glob(pattern))
     
-    def load_persistence_diagrams(self, filepath: Union[str, Path]) -> List[np.ndarray]:
+    def load_persistence_diagrams(self, filepath: Union[str, Path]):
         """
         Load persistence diagrams from pickle file.
         
@@ -314,7 +311,7 @@ class TDADataManager:
         
         raise ValueError(f"Unrecognized persistence diagram format in {filepath}")
     
-    def list_all_dgms_files(self) -> List[Path]:
+    def list_all_dgms_files(self):
         """
         List all persistence diagram .pkl files from both persistence_examples and all_dgms directories.
         
@@ -323,7 +320,8 @@ class TDADataManager:
         """
         return self.get_all_persistence_files(pattern="*.pkl")
     
-    def load_embedding_data(self, filepath: Union[str, Path], force_cpu: bool = True) -> Tuple[Dict, List[str]]:
+    
+    def load_embedding_data(self, filepath: Union[str, Path], force_cpu: bool = True):
         """
         Load embedding data from pickle file with CPU compatibility.
         
@@ -334,9 +332,9 @@ class TDADataManager:
         Returns:
             Tuple of (session_dict, session_names)
         """
-        return load_embedding_data_safe(filepath, force_cpu=force_cpu)
+        return load_embedding_data(filepath, force_cpu=force_cpu)
     
-    def parse_filename_info(self, filepath: Union[str, Path]) -> Dict[str, str]:
+    def parse_filename_info(self, filepath: Union[str, Path]):
         """
         Parse filename to extract metadata like region, stimulus, dimension, etc.
         
@@ -399,10 +397,7 @@ class TDADataManager:
             'stem': filepath.stem
         }
     
-    def get_or_create_subdir(self, 
-                             parent_dir_key: str = 'data_root',
-                             subdirectory: str = 'outputs',
-                             create_if_missing: bool = True) -> Path:
+    def get_or_create_subdir(self, parent_dir_key: str = 'data_root', subdirectory: str = 'outputs', create_if_missing: bool = True):
         """
         Get or create a subdirectory within a specified parent directory."""
 
@@ -413,12 +408,11 @@ class TDADataManager:
         subdir_path = parent_dir / subdirectory
         if create_if_missing:
             subdir_path.mkdir(parents=True, exist_ok=True)
+
         return subdir_path
     
-    def get_output_path(self, 
-                       filename: str, 
-                       subdirectory: str = "outputs",
-                       create_dirs: bool = True) -> Path:
+    
+    def get_output_path(self, filename: str, subdirectory: str = "outputs", create_dirs: bool = True):
         """
         Get standardized output path for saving results.
         
@@ -438,10 +432,10 @@ class TDADataManager:
         
         return output_dir / filename
     
-    def print_summary(self) -> None:
+    def print_summary(self):
         """Print summary of available data and paths."""
 
-        print("TDA Data Manager Summary")
+        print("TDA Data Manager Info")
         print(f"Workspace root: {self.workspace_root}")
         print(f"Data directory: {self.data_paths['data_root']}")
         
@@ -476,33 +470,33 @@ except Exception as e:
     tda_manager = None
 
 
-# convenience functions for backward compatibility
-def setup_data_paths() -> Dict[str, Path]:
-    """Legacy function - use TDADataManager instead."""
+# functions for backward compatibility
+def setup_data_paths():
+    """deprecated - use TDADataManager instead."""
 
     if tda_manager is None:
         raise RuntimeError("TDA Data Manager not initialized")
     return tda_manager.data_paths
 
 
-def load_spike_data_smart(dataset_name: Optional[str] = None) -> Tuple[List, List, Dict]:
-    """Legacy function - use TDADataManager.load_spike_data instead."""
+def load_spike_data(dataset_name: Optional[str] = None):
+    """deprecated - use TDADataManager.load_spike_data instead."""
 
     if tda_manager is None:
         raise RuntimeError("TDA Data Manager not initialized")
     return tda_manager.load_spike_data(dataset_name)
 
 
-def find_available_datasets(data_paths: Dict[str, Path]) -> List[Tuple[str, Path]]:
-    """Legacy function - use TDADataManager.get_available_datasets instead."""
+def find_available_datasets(data_paths: Dict[str, Path]):
+    """derecated - use TDADataManager.get_available_datasets instead."""
 
     if tda_manager is None:
         raise RuntimeError("TDA Data Manager not initialized")
     return tda_manager.get_available_datasets()
 
 
-# utility functions for common data handling and loading
-def safe_model_device_handling(force_cpu: bool = False) -> str:
+# utility functions for data handling and loading
+def model_device_handling(force_cpu: bool = False):
     """
     Determine the best device for model training/inference.
     
@@ -526,8 +520,7 @@ def safe_model_device_handling(force_cpu: bool = False) -> str:
         return 'cpu'
 
 
-def load_cebra_model_safe(filepath: Union[str, Path], 
-                         force_cpu: bool = False) -> Tuple[Dict, str]:
+def load_cebra_model(filepath: Union[str, Path], force_cpu: bool = False):
     """
     Safely load CEBRA model from pickle file with device compatibility.
     
@@ -540,7 +533,7 @@ def load_cebra_model_safe(filepath: Union[str, Path],
     """
     import torch
     
-    target_device = safe_model_device_handling(force_cpu)
+    target_device = model_device_handling(force_cpu)
     device_info = f"Using {target_device.upper()}"
     
     print(f"Loading model: {device_info}")
@@ -549,13 +542,13 @@ def load_cebra_model_safe(filepath: Union[str, Path],
         # first try normal loading
         with open(filepath, 'rb') as f:
             loaded_data = pkl.load(f)
-        print("Successfully loaded model normally")
+        print("loaded model")
         
     except RuntimeError as e:
         if "CUDA" in str(e) and "torch.cuda.is_available() is False" in str(e):
             print("CUDA compatibility issue detected, forcing CPU mapping")
             
-            # custom unpickler that maps CUDA tensors to CPU
+            # unpickler that maps CUDA tensors to CPU
             class CPUUnpickler(pkl.Unpickler):
                 def find_class(self, module, name):
                     if module == 'torch.storage' and name == '_load_from_bytes':
@@ -563,28 +556,28 @@ def load_cebra_model_safe(filepath: Union[str, Path],
                     else:
                         return super().find_class(module, name)
             
-            # other approach: use torch.load directly if the file contains torch objects
+            # or use torch.load directly if the file contains torch objects
             try:
                 import io
                 with open(filepath, 'rb') as f:
                     # try loading as a torch file first
                     try:
                         loaded_data = torch.load(f, map_location='cpu')
-                        print("Successfully loaded using torch.load with CPU mapping")
+                        print("loaded using torch.load with CPU mapping")
                     except:
-                        #  try custom unpickler
+                        #  try unpickler
                         f.seek(0)
                         loaded_data = CPUUnpickler(f).load()
-                        print("Successfully loaded using custom CPU unpickler")
+                        print("loaded using CPU unpickler")
                         
             except Exception as inner_e:
                 #try to reconstruct the data structure
-                print(f"Advanced loading failed: {inner_e}")
-                print("Recommendation: Re-train the model using the CPU training cell")
+                print(f"loading failed: {inner_e}")
+                print("recommendation: re-train the model using the CPU training cell")
                 raise RuntimeError(
-                    f"Could not load model due to CUDA/CPU compatibility. "
-                    f"Original error: {e}\n"
-                    f"Please use the 'Train CEBRA - CPU' cell to create new embeddings."
+                    f"could not load model due to CUDA/CPU compatibility. "
+                    f"original error: {e}\n"
+                    f"please use the 'Train CEBRA - CPU' cell to create new embeddings."
                 )
         else:
             # re-raise if it's not a CUDA issue
@@ -596,23 +589,22 @@ def load_cebra_model_safe(filepath: Union[str, Path],
             if isinstance(loaded_data[session_name], dict) and 'model' in loaded_data[session_name]:
                 model = loaded_data[session_name]['model']
                 if hasattr(model, 'device_') and model.device_ != target_device:
-                    print(f"Moving {session_name} model from {model.device_} to {target_device}")
+                    print(f"moving {session_name} model from {model.device_} to {target_device}")
                     model.device_ = target_device
                 
                 # also update any torch tensors in embeddings
                 if 'embedding' in loaded_data[session_name]:
                     embedding = loaded_data[session_name]['embedding']
-                    if hasattr(embedding, 'cpu'):  # It's a torch tensor
+                    if hasattr(embedding, 'cpu'):  # torch tensor
                         loaded_data[session_name]['embedding'] = embedding.cpu().numpy()
-                        print(f"Converted {session_name} embedding to CPU numpy array")
+                        print(f"converted {session_name} embedding to CPU numpy array")
     
     return loaded_data, device_info
 
 
-def load_embedding_data_safe(filepath: Union[str, Path], 
-                            force_cpu: bool = True) -> Tuple[Dict, List[str]]:
+def load_embedding_data(filepath: Union[str, Path], force_cpu: bool = True):
     """
-    Safely load embedding data from pickle file with CPU compatibility.
+    load embedding data from pickle file with CPU compatibilit
     
     Args:
         filepath: Path to pickle file containing embedding data
@@ -622,10 +614,10 @@ def load_embedding_data_safe(filepath: Union[str, Path],
         Tuple of (session_dict, session_names)
     """
     try:
-        loaded_data, device_info = load_cebra_model_safe(filepath, force_cpu=force_cpu)
+        loaded_data, device_info = load_cebra_model(filepath, force_cpu=force_cpu)
         session_names = list(loaded_data.keys())
         return loaded_data, session_names
     except Exception as e:
-        print(f"Could not load embedding data: {e}")
-        print("Try training new embeddings using the CPU training cell")
+        print(f"could not load embedding data: {e}")
+        print("try training new embeddings using the CPU training cell")
         raise
