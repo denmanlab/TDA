@@ -216,7 +216,7 @@ class TDADataManager:
                 print("Multiple datasets available:")
                 for i, (name, _) in enumerate(available_datasets, 1):
                     print(f"  {i}. {name}")
-                print("\nUsing the first one. To specify, use dataset_name parameter.")
+                print("\nUsing the first one.")
                 selected_name, selected_path = available_datasets[0]
         else:
             # find exact or partial match
