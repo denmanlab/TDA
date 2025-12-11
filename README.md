@@ -45,26 +45,26 @@ RAM: recommended at least 8GB
 All numerical steps in the notebooks should be executed in order. <br> If there are multiple processing options per step, choose the desired method and run the cell before moving on to the next.
 
 1. ***01_CEBRA_embeddings.ipynb***
-   - loads cleaned spike data tensors from \data\ folder
-   - trains CEBRA models
-   - saves embeddings to pickle files
+   - load cleaned spike data tensors from ```\data\``` folder
+   - train CEBRA models
+   - save embeddings to pickle files
    - visualize embeddings
      
 2. ***02_Ripser.ipynb***
-   - loads embedding pickle files
-   - computes persistence homology using Ripser
-       - generates dgms - or persistence diagrams for each homology group (H0, H1, & H2)
+   - load embedding pickle files
+   - compute persistence homology using Ripser
+       - generate dgms (persistence diagrams) for each homology group (H0, H1, & H2)
    - plot dgms on a persistence diagram
-   - saves dgms to pickle files
+   - save dgms to pickle files
 
 3. ***03_betti_curves.ipynb***
-   - loads dgms pickle files
-   - generates betti curves
-         - plots betti numbers for each homology group during filtration
+   - load dgms pickle files
+   - generate betti curves
+         - plot betti numbers for each homology group during filtration
 
 4. ***04_persistence_landscapes.ipynb***
-    - loads dgms pickle files
-    - computes average persistence landscapes across embeddings, regions, & stimuli
+    - load dgms pickle files
+    - compute average persistence landscapes across embeddings, regions, & stimuli
          - persistence landscape is a vectorized representation of a persistence diagram. these plots are assumed to be more stable than betti curves and displays topological features as functions. often used as input to downstream pipelines like machine learning predictive models or statistical analyses.
            
 <br>
@@ -72,7 +72,7 @@ All numerical steps in the notebooks should be executed in order. <br> If there 
 Other notebook:
 ***Persistence_barcodes.ipynb*** 
 
-  - uses fuzzy UMAP algorithm from Gardner et al*** to generate persistence barcodes
+  - fuzzy UMAP algorithm from Gardner et al*** to generate persistence barcodes
   - does not generate embeddings but rather constructs a UMAP neighborhood graph for input into Ripser
 
 <br>
