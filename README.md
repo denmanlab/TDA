@@ -1,5 +1,11 @@
 # TDA of population neural activity
 
+<div align='center'>
+
+![topology_gif](topology.gif)
+
+</div>
+
 ### Topological data anaylsis (TDA) of population neural activity in LGN and V1
 
 - for data collection and preprocessing details: https://doi.org/10.1101/2025.08.25.672226
