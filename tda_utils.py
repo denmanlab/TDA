@@ -98,7 +98,7 @@ class TDADataManager:
             'cebra_examples': data_root / 'CEBRA_embedding_examples', # pkl files
             'persistence_examples': data_root / 'persistence_diagram_examples', # pkl files
             'all_dgms_zip': data_root / 'all_dgms.zip',  # zip file
-            'all_dgms_dir': data_root / 'all_dgms'       # extracted directory from zip containing pkl files
+            'all_dgms_dir': data_root / 'all_dgms_dir'       # extracted directory from zip containing pkl files
         }
     
     def _extract_sample_data_if_needed(self):
@@ -385,9 +385,8 @@ class TDADataManager:
         if mouse_match:
             mouse_id = mouse_match.group().upper()
         
-        # check for shuffled/random data
+        # check for shuffled data
         is_shuffled = 'shuffled' in filename
-        is_random = 'random' in filename
         
         return {
             'region': region,
@@ -395,7 +394,7 @@ class TDADataManager:
             'stimulus': stimulus,
             'mouse_id': mouse_id,
             'is_shuffled': is_shuffled,
-            'is_random': is_random,
+            #'is_random': is_random,
             'filename': filepath.name,
             'stem': filepath.stem
         }
