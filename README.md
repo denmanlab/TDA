@@ -81,6 +81,11 @@ Other notebook:
   - fuzzy UMAP algorithm from Gardner et al*** to generate persistence barcodes
   - does not generate embeddings but rather constructs a UMAP neighborhood graph for input into Ripser
 
+## Visualization
+
+- **rips_filtration_mp4.ipynb:** create an visulization (mp4) of the Vietoris-Rips filtration
+
+
 <br>
 * https://cebra.ai/docs/
 
